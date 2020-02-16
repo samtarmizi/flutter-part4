@@ -53,15 +53,20 @@ class _HomePageState extends State<HomePage> {
               future: getUser(),
               builder: (context , snapshot){
                 if(snapshot.hasData){
-                  return Column(
+                  return Center(
+                    child: Column(
                     children: <Widget>[
                       Text(snapshot.data.name),
                       Text(snapshot.data.email),
                       Text(snapshot.data.dob),
                       Text(snapshot.data.address),
                       Text(snapshot.data.phone),
+                      Text(snapshot.data.imageUrl),
+                      Image.network(snapshot.data.imageUrl)
                     ]
+                  )
                   );
+                  
                 }else if(snapshot.hasError){
                   return Text("Something is wrong. Please try again");
                 }else{
