@@ -10,7 +10,11 @@ class User{
   // transform JSON into object
   factory User.fromJson(Map<String, dynamic> json){
     return User(
-      "","","","",""
+      "${json['results'][0]['name']['title']}",
+      "${json['results'][0]['email']}",
+      "${json['results'][0]['dob']['date']}",
+      "${json['results'][0]['location']['country']}",
+      "${json['results'][0]['phone']}"
     );
   }
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:random_user/model/user.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() => runApp(MyApp());
 
@@ -42,12 +45,44 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             FlatButton(child:  Text("Get a user!"),
             onPressed: (){
-
+              getUser();
             },
             color:  Colors.yellow,
+            ),
+            FutureBuilder<User>(
+              future: getUser(),
+              builder: (context , snapshot){
+                if(snapshot.hasData){
+                  return Column(
+                    children: <Widget>[
+                      Text(snapshot.data.name),
+                      Text(snapshot.data.email),
+                      Text(snapshot.data.dob),
+                      Text(snapshot.data.address),
+                      Text(snapshot.data.phone),
+                    ]
+                  );
+                }else if(snapshot.hasError){
+                  return Text("Something is wrong. Please try again");
+                }else{
+                  return Container();
+                }
+              }
             )
           ],
       ),)
     );
+  }
+
+  Future<User> getUser() async  {
+    String url = "https://randomuser.me/api";
+
+    final response = await http.get(url, headers: {"Application":"application/json"});
+    print('Response status: ${response.statusCode}');
+    if(response.statusCode == 200){
+      return User.fromJson(json.decode(response.body));
+    }else{
+      throw Exception('failed to load');
+    }
   }
 }
